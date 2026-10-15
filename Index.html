@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Video Generator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #101827;
+      color: white;
+      padding: 24px;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #1e293b;
+      padding: 24px;
+      border-radius: 16px;
+    }
+    h1 { color: #60a5fa; }
+    textarea, input, select, button {
+      width: 100%;
+      box-sizing: border-box;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    textarea { height: 180px; }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      font-weight: bold;
+    }
+    #status { color: #86efac; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AI Video Generator</h1>
+    <p>Create a video plan from your script.</p>
+
+    <label>Video Title</label>
+    <input id="title" placeholder="Enter your video title">
+
+    <label>Your Script</label>
+    <textarea id="script" placeholder="Paste your video script here..."></textarea>
+
+    <label>Video Length</label>
+    <select id="length">
+      <option>15 minutes</option>
+      <option>30 minutes</option>
+      <option>60 minutes</option>
+    </select>
+
+    <button onclick="createPlan()">Create Video Plan</button>
+    <p id="status"></p>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    function createPlan() {
+      const title = document.getElementById('title').value.trim();
+      const script = document.getElementById('script').value.trim();
+      const length = document.getElementById('length').value;
+      const status = document.getElementById('status');
+      const output = document.getElementById('output');
+
+      if (!script) {
+        status.textContent = 'Please paste your script first.';
+        output.innerHTML = '';
+        return;
+      }
+
+      const words = script.split(/\s+/).filter(Boolean).length;
+      const scenes = Math.max(1, Math.ceil(words / 100));
+      status.textContent = 'Your video plan is ready!';
+      output.innerHTML =
+        '<h2>Video Plan</h2>' +
+        '<p><b>Title:</b> ' + escapeHTML(title || 'Untitled') + '</p>' +
+        '<p><b>Target length:</b> ' + length + '</p>' +
+        '<p><b>Script words:</b> ' + words + '</p>' +
+        '<p><b>Suggested scenes:</b> ' + scenes + '</p>' +
+        '<p>This is a planning demo. AI-generated video requires a video service/API.</p>';
+    }
+
+    function escapeHTML(text) {
+      return text.replace(/[&<>"']/g, function(c) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+      });
+    }
+  </script>
+</body>
+</html>
